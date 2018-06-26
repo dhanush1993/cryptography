@@ -65,8 +65,13 @@ int main()
     num => integer type: the value to check
 */
 bool isPrime(int num){
-
-    return true;
+    for (int i = 2; i<=(num/2);i++){
+       if ((num % i) == 0){
+        return false;
+        break;
+       }
+       return true;
+    }
 }
 
 /*
@@ -76,7 +81,15 @@ bool isPrime(int num){
 */
 int primeNumber(int min,int max){
 
-    return 0;
+    for (int i = min; i <= max; i++){
+        for (int j=1;j<=i/2;j++){
+            if ((i%j)!=0){
+                return i;
+                break;
+            }
+        }
+    }
+
 }
 
 /*
