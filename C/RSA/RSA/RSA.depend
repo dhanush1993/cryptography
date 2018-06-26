@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1385320478 source:c:\users\dhanush\documents\github\cryptography\c\rsa\rsa\main.c
+	<stdio.h>
+	<stdlib.h>
+
