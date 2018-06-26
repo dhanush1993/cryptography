@@ -1,14 +1,62 @@
+/*
+Authors: Dhanush, Kaushik, Namratha, Mahendra
+Algorithm : https://simple.wikipedia.org/wiki/RSA_algorithm
+
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 bool isPrime(int num);
 int primeNumber(int min,int max);
 int modulusPower(int base, int exp, int mod);
+int lcm(int a, int b);
+int coPrime(int a);
 char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateKey);
 char *encrypt(char msg[],int n, int publicKey);
 char *decrypt(char encryptedMsg[],int n, int privateKey);
+
+
+
+
+
 int main()
 {
+    char *msg = "Hello World";
+    int min,max,p,q,n,totient,e,d,k=0;
+    double m;
+    p = 61;   //later replace p with p = primeNumber(min,max);
+    q = 53;   //later replace q with q = primeNumber(min,max);
+    if(!isPrime(p) && p==0){
+        printf("Error: Sorry p is not a prime number\n");
+        exit(0);
+    }else{
+        printf("p is a prime number\n");
+    }
+    if(!isPrime(q) && q==0){
+        printf("Error: Sorry q is not a prime number\n");
+        exit(0);
+    }else{
+        printf("q is a prime number\n");
+    }
+    n = p*q;
+    totient = lcm((p-1),(q-1));
+    printf("Totient should be 780 your answer is %i\n",totient);
+    e = coPrime(totient);
+    printf("Error: Public key is %i\n",e);
+    if(e==0){
+        printf("Public key cannot be 0\n");
+        exit(0);
+    }
+    while(true){
+        k = k+1;
+        m = (double)(1+(k*totient))/e;
+        if(ceil(m)==floor(m)){
+            break;
+        }
+    }
+    d = floor(m);
+    printf("Private key is %i\n",d);
+
     return 0;
 }
 
@@ -41,6 +89,36 @@ int modulusPower(int base, int exp, int mod){
 
     return 0;
 }
+
+/*
+    lcm(int a,int b)=>integer type: returns the least common factor of a and b
+    a => integer type: any number
+    b => integer type: any number
+*/
+int lcm(int a,int b){
+    int k=1;
+    double m;
+    while(true){
+        m = (double)(a*k)/b;
+        if(ceil(m)==floor(m)){
+            break;
+        }else{
+            k = k+1;
+        }
+    }
+
+    return a*k;
+}
+
+/*
+    coPrime(int a)=>integer type: returns the coprime of a randomly picked between 1 and a
+    a => integer type: any number
+*/
+int coPrime(int a){
+
+    return 0;
+}
+
 /*
     chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateKey)=>char pointer type: implements the chinese remainder theorem
     (please see: https://en.wikipedia.org/wiki/RSA_(cryptosystem)#Using_the_Chinese_remainder_algorithm)
