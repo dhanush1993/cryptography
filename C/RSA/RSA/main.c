@@ -68,7 +68,6 @@ bool isPrime(int num){
     for (int i = 2; i<=(num/2);i++){
        if ((num % i) == 0){
         return false;
-        break;
        }
        return true;
     }
@@ -81,13 +80,11 @@ bool isPrime(int num){
 */
 int primeNumber(int min,int max){
 
-    for (int i = min; i <= max; i++){
-        for (int j=1;j<=i/2;j++){
-            if ((i%j)!=0){
-                return i;
-                break;
-            }
+    for (int num = min; num <= max; num++){
+        if (isPrime(num)!=0){
+            return num;
         }
+        return 0;
     }
 
 }
