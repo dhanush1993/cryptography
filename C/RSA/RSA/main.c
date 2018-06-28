@@ -6,6 +6,7 @@ Algorithm : https://simple.wikipedia.org/wiki/RSA_algorithm
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "test.c"
 bool isPrime(int num);
 int primeNumber(int min,int max);
 int modulusPower(int base, int exp, int mod);
@@ -16,23 +17,44 @@ char *encrypt(char msg[],int n, int publicKey);
 char *decrypt(char encryptedMsg[],int n, int privateKey);
 
 
-
-
-
 int main()
 {
+    printf("----------------------------------------------\n");
+    printf("----------Testing function isPrime------------\n");
+    printf("----------------------------------------------\n");
+    test_isPrime(15,"false");
+    test_isPrime(11,"true");
+    test_isPrime(1,"false");
+    test_isPrime(0,"false");
+    printf("----------------------------------------------\n");
+    printf("--------Testing function primeNumber----------\n");
+    printf("----------------------------------------------\n");
+    test_primeNumber(10,11,"11");
+    test_primeNumber(3,100,"3");
+    test_primeNumber(8,10,"0");
+    test_primeNumber(0,1,"0");
+    test_primeNumber(0,2,"2");
+    printf("----------------------------------------------\n");
+    printf("--------Testing function modulusPower---------\n");
+    printf("----------------------------------------------\n");
+    test_modulusPower(5,25,10,"5");
+    test_modulusPower(23002,1000,3010,"1106");
+    test_modulusPower(0,5,5,"0");
+    test_modulusPower(5,0,5,"1");
+    test_modulusPower(5,25,1,"0");
+    /*
     char *msg = "Hello World";
     int min,max,p,q,n,totient,e,d,k=0;
     double m;
     p = 61;   //later replace p with p = primeNumber(min,max);
     q = 53;   //later replace q with q = primeNumber(min,max);
-    if(!isPrime(p) && p==0){
+    if(!isPrime(p) || p==0){
         printf("Error: Sorry p is not a prime number\n");
         exit(0);
     }else{
         printf("p is a prime number\n");
     }
-    if(!isPrime(q) && q==0){
+    if(!isPrime(q) || q==0){
         printf("Error: Sorry q is not a prime number\n");
         exit(0);
     }else{
@@ -56,6 +78,7 @@ int main()
     }
     d = floor(m);
     printf("Private key is %i\n",d);
+    */
 
     return 0;
 }
@@ -65,12 +88,8 @@ int main()
     num => integer type: the value to check
 */
 bool isPrime(int num){
-    for (int i = 2; i<=(num/2);i++){
-       if ((num % i) == 0){
-        return false;
-       }
-       return true;
-    }
+    //namratha
+    return true;
 }
 
 /*
@@ -79,14 +98,8 @@ bool isPrime(int num){
     max => integer type: the upper bound
 */
 int primeNumber(int min,int max){
-
-    for (int num = min; num <= max; num++){
-        if (isPrime(num)!=0){
-            return num;
-        }
-        return 0;
-    }
-
+    //namratha
+    return 0;
 }
 
 /*
@@ -96,7 +109,7 @@ int primeNumber(int min,int max){
     mod => integer type: the modulus to be taken
 */
 int modulusPower(int base, int exp, int mod){
-
+    //kaushik
     return 0;
 }
 
@@ -110,7 +123,7 @@ int lcm(int a,int b){
     double m;
     while(true){
         m = (double)(a*k)/b;
-        if(ceil(m)==floor(m)){
+        if(m==floor(m)){
             break;
         }else{
             k = k+1;
@@ -125,7 +138,7 @@ int lcm(int a,int b){
     a => integer type: any number
 */
 int coPrime(int a){
-
+    //dhanush
     return 0;
 }
 
@@ -138,6 +151,7 @@ int coPrime(int a){
     privateKey => integer type: private key
 */
 char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateKey){
+    //kaushik
     char *msg = malloc(sizeof(encryptedMsg)/sizeof(char));
 
     return *msg;
@@ -150,6 +164,7 @@ char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateK
     publicKey => integer type: public key
 */
 char *encrypt(char msg[],int n, int publicKey){
+    //namratha
     char *encryptedMsg = malloc(sizeof(msg)/sizeof(char));
 
     return *encryptedMsg;
@@ -161,6 +176,7 @@ char *encrypt(char msg[],int n, int publicKey){
     publicKey => integer type: private key
 */
 char *decrypt(char encryptedMsg[],int n, int privateKey){
+    //dhanush
     char *msg = (char *)malloc(sizeof(encryptedMsg)/sizeof(char));
 
     return *msg;
