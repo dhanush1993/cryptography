@@ -142,7 +142,7 @@ int primeNumber(int min,int max){
 
 
 
-}
+
 
 /*
     modulusPower(int base, int exponent, int mod)=>integer type: returns the value (base^exp)%mod
