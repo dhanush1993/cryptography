@@ -7,15 +7,15 @@ Algorithm : https://simple.wikipedia.org/wiki/RSA_algorithm
 #include <stdlib.h>
 #include <stdbool.h>
 #include "test.c"
-bool isPrime(int num);
+
 int primeNumber(int min,int max);
+bool isPrime(int num);
 int modulusPower(int base, int exp, int mod);
 int lcm(int a, int b);
 int coPrime(int a);
 char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateKey);
 char *encrypt(char msg[],int n, int publicKey);
 char *decrypt(char encryptedMsg[],int n, int privateKey);
-
 
 int main()
 {
@@ -42,6 +42,20 @@ int main()
     test_modulusPower(0,5,5,"0");
     test_modulusPower(5,0,5,"1");
     test_modulusPower(5,25,1,"0");
+    printf("----------------------------------------------\n");
+    printf("--------Testing function lcm---------\n");
+    printf("----------------------------------------------\n");
+    test_lcm(5,25,"25");
+    test_lcm(23002,1000,"11501000");
+    test_lcm(0,5,"0");
+    test_lcm(5,1,"5");
+    printf("----------------------------------------------\n");
+    printf("--------Testing function encrypt---------\n");
+    printf("----------------------------------------------\n");
+    test_encrypt("Hello",25,5,"Error - n > 255");
+    test_encrypt("Hello",300,1000,"Error - n > publicKey");
+    test_encrypt("Hello",300,0,"Error - publicKey != 0");
+    test_encrypt("Hello",3233,17,"30000016074507452185");
     /*
     char *msg = "Hello World";
     int min,max,p,q,n,totient,e,d,k=0;
@@ -121,6 +135,13 @@ int modulusPower(int base, int exp, int mod){
 int lcm(int a,int b){
     int k=1;
     double m;
+    if(a==0 || b==0){
+        return 0;
+    }else if(a==1){
+        return b;
+    }else if(b==1){
+        return a;
+    }
     while(true){
         m = (double)(a*k)/b;
         if(m==floor(m)){
@@ -129,7 +150,6 @@ int lcm(int a,int b){
             k = k+1;
         }
     }
-
     return a*k;
 }
 
@@ -152,9 +172,9 @@ int coPrime(int a){
 */
 char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateKey){
     //kaushik
-    char *msg = malloc(sizeof(encryptedMsg)/sizeof(char));
+    char *msg =(char*) malloc(sizeof(encryptedMsg)/sizeof(char));
 
-    return *msg;
+    return msg;
 }
 
 /*
@@ -165,9 +185,17 @@ char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateK
 */
 char *encrypt(char msg[],int n, int publicKey){
     //namratha
-    char *encryptedMsg = malloc(sizeof(msg)/sizeof(char));
+    char *encryptedMsg =(char*) malloc(sizeof(msg)/sizeof(char));
+    encryptedMsg = msg;
+    /*
+    Assume n =3233, p =17 & msg = Hello
+    convert the msg to ascii: Hello => 72,101,108,108,111
+    calculate (a^p)mod(n) for each ascii value where a is the ascii value => (72^17)mod(3233) = 3000 u can use function modulusPower
+    pad the output so it matches number of digits in n => 3000 has the same number of digits as 3233 if u had lets say 62 pad with two 00 => 0062
+    concatenate all the padded numbers into a string and return
 
-    return *encryptedMsg;
+    */
+    return encryptedMsg;
 }
 
 /*
@@ -179,5 +207,5 @@ char *decrypt(char encryptedMsg[],int n, int privateKey){
     //dhanush
     char *msg = (char *)malloc(sizeof(encryptedMsg)/sizeof(char));
 
-    return *msg;
+    return msg;
 }
