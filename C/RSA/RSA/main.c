@@ -6,6 +6,7 @@ Algorithm : https://simple.wikipedia.org/wiki/RSA_algorithm
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 #include "test.c"
 
 int primeNumber(int min,int max);
@@ -103,20 +104,16 @@ int main()
 */
 bool isPrime(int num){
     //namratha
-    int c=0;
-    for (int i = 1; i<=num;i++){
-       if ((num % i) == 0){
-        c++;
-
-       }
-    }
-
-    if(c==2){
-       return true;
-    }
-       else
+    if(num==0 || num==1){
         return false;
     }
+    for (int i = 2; i<=sqrt(num);i++){
+       if ((num % i) == 0){
+			return false;
+       }
+    }
+	return true;
+}
 
 
 
@@ -178,7 +175,35 @@ int lcm(int a,int b){
 */
 int coPrime(int a){
     //dhanush
-    return 0;
+    int k = 1,i,j=0;
+    bool flag;
+    int* primeNumbers = (int*)malloc(sizeof(int));
+    int numberOfPrimes = 0;
+    int numberOfCoprimes = 0;
+    int* coprimes = (int*)malloc(sizeof(int));
+    for(i=2;i<sqrt(a);i++){
+        if(isPrime(i) && a%i==0){
+            primeNumbers[numberOfPrimes] = i;
+            numberOfPrimes++;
+            realloc(primeNumbers, (sizeof(int)));
+        }
+    }
+    for(i=2;i<a;i++){
+        flag=true;
+        for(j=0;j<numberOfPrimes;j++){
+            if(i>=primeNumbers[j] && i%primeNumbers[j]==0){
+                flag=false;
+                break;
+            }
+        }
+        if(flag){
+            coprimes[numberOfCoprimes] = i;
+            numberOfCoprimes++;
+            realloc(coprimes, (sizeof(int)));
+        }
+    }
+
+    return coprimes[rand() % numberOfCoprimes];
 }
 
 /*
