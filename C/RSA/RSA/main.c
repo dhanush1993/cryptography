@@ -103,8 +103,23 @@ int main()
 */
 bool isPrime(int num){
     //namratha
-    return true;
-}
+    int c=0;
+    for (int i = 1; i<=num;i++){
+       if ((num % i) == 0){
+        c++;
+
+       }
+    }
+
+    if(c==2){
+       return true;
+    }
+       else
+        return false;
+    }
+
+
+
 
 /*
     primeNumber(int min,int max)=>integer type: returns a prime number between the range min and max
@@ -113,6 +128,10 @@ bool isPrime(int num){
 */
 int primeNumber(int min,int max){
     //namratha
+    for(int i = min; i<=max; i++)
+    {
+        isPrime(i);
+    }
     return 0;
 }
 
