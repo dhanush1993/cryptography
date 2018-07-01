@@ -150,8 +150,21 @@ int primeNumber(int min,int max){
     mod => integer type: the modulus to be taken
 */
 int modulusPower(int base, int exp, int mod){
+
+    if (base < 1 || exp < 0 || mod < 1)
+        return 0;
+
+    int result = 1;
+    while (exp > 0) {
+       if ((exp % 2) == 1) {
+           result = (result * base) % mod;
+       }
+       base = (base * base) % mod;
+       exp = floor(exp / 2);
+    }
+    return result;
+
     //kaushik
-    return 0;
 }
 
 /*
