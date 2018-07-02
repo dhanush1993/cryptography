@@ -7,6 +7,7 @@ Algorithm : https://simple.wikipedia.org/wiki/RSA_algorithm
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <limits.h>
 #include "test.c"
 
 int primeNumber(int min,int max);
@@ -39,7 +40,7 @@ int main()
     printf("--------Testing function modulusPower---------\n");
     printf("----------------------------------------------\n");
     test_modulusPower(5,25,10,"5");
-    test_modulusPower(23002,1000,3010,"1106");
+    test_modulusPower(INT_MAX,2,3010,"2199");
     test_modulusPower(0,5,5,"0");
     test_modulusPower(5,0,5,"1");
     test_modulusPower(5,25,1,"0");
@@ -277,3 +278,4 @@ char *decrypt(char encryptedMsg[],int n, int privateKey){
 
     return msg;
 }
+
