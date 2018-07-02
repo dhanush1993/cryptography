@@ -18,6 +18,8 @@ int coPrime(int a);
 char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateKey);
 char *encrypt(char msg[],int n, int publicKey);
 char *decrypt(char encryptedMsg[],int n, int privateKey);
+char *char2intstr(char msg[]);
+char *strconcat(char a[], char b[]);
 
 int main()
 {
@@ -58,6 +60,9 @@ int main()
     test_encrypt("Hello",300,1000,"Error - n > publicKey");
     test_encrypt("Hello",300,0,"Error - publicKey != 0");
     test_encrypt("Hello",3233,17,"30000016074507452185");
+    printf("----------------------------------------------\n");
+    char *msg = decrypt("Hello",0,0);
+    printf("%s",msg);
     /*
     char *msg = "Hello World";
     int min,max,p,q,n,totient,e,d,k=0;
@@ -274,8 +279,41 @@ char *encrypt(char msg[],int n, int publicKey){
 */
 char *decrypt(char encryptedMsg[],int n, int privateKey){
     //dhanush
-    char *msg = (char *)malloc(sizeof(encryptedMsg)/sizeof(char));
-
+    char *msg = malloc((3*strlen(encryptedMsg))*sizeof(char));
+    msg = char2intstr(encryptedMsg);
     return msg;
+}
+
+char *char2intstr(char* msg){
+    int ascii,i,j=0,len = strlen(msg);
+    char *asciiInt = malloc(3*len*sizeof(char));
+    //asciiInt = "";
+    char* temp = malloc(3*sizeof(char));
+    for(i=0;i<len;i++){
+        ascii = (int)msg[i];
+        sprintf(temp, "%d", ascii);
+        int m = strlen(temp);
+        if(m==2){
+            temp = strconcat("0",temp);
+        }else if(m==1){
+            temp = strconcat("00",temp);
+        }
+        if(i==0){
+            strcpy(asciiInt,temp);
+        }else{
+            strcat(asciiInt,temp);
+        }
+        //if(i<len-1){
+        //    realloc(asciiInt,3*sizeof(char));
+        //}
+    }
+    return asciiInt;
+}
+
+char *strconcat(char *a, char *b){
+    char *res = malloc((strlen(a)+strlen(b))*sizeof(char));
+    strcpy(res,a);
+    strcat(res,b);
+    return res;
 }
 
