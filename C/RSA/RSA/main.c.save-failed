@@ -7,6 +7,7 @@ Algorithm : https://simple.wikipedia.org/wiki/RSA_algorithm
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <limits.h>
 #include "test.c"
 
 int primeNumber(int min,int max);
@@ -17,6 +18,8 @@ int coPrime(int a);
 char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateKey);
 char *encrypt(char msg[],int n, int publicKey);
 char *decrypt(char encryptedMsg[],int n, int privateKey);
+char *char2intstr(char msg[]);
+char *strconcat(char a[], char b[]);
 
 int main()
 {
@@ -39,7 +42,7 @@ int main()
     printf("--------Testing function modulusPower---------\n");
     printf("----------------------------------------------\n");
     test_modulusPower(5,25,10,"5");
-    test_modulusPower(23002,1000,3010,"1106");
+    test_modulusPower(INT_MAX,2,3010,"2199");
     test_modulusPower(0,5,5,"0");
     test_modulusPower(5,0,5,"1");
     test_modulusPower(5,25,1,"0");
@@ -57,6 +60,9 @@ int main()
     test_encrypt("Hello",300,1000,"Error - n > publicKey");
     test_encrypt("Hello",300,0,"Error - publicKey != 0");
     test_encrypt("Hello",3233,17,"30000016074507452185");
+    printf("----------------------------------------------\n");
+    char *msg = decrypt("Hello",0,0);
+    printf("%s",msg);
     /*
     char *msg = "Hello World";
     int min,max,p,q,n,totient,e,d,k=0;
@@ -150,8 +156,21 @@ int primeNumber(int min,int max){
     mod => integer type: the modulus to be taken
 */
 int modulusPower(int base, int exp, int mod){
+
+    if (base < 1 || exp < 0 || mod < 1)
+        return 0;
+
+    int result = 1;
+    while (exp > 0) {
+       if ((exp % 2) == 1) {
+           result = (result * base) % mod;
+       }
+       base = (base * base) % mod;
+       exp = floor(exp / 2);
+    }
+    return result;
+
     //kaushik
-    return 0;
 }
 
 /*
@@ -242,6 +261,24 @@ char *encrypt(char msg[],int n, int publicKey){
     //namratha
     char *encryptedMsg =(char*) malloc(sizeof(msg)/sizeof(char));
     encryptedMsg = msg;
+
+    int*a = malloc(strlen(msg)*sizeof(int));
+
+    int i = 0;
+    while(encryptedMsg[i]!='\0')
+    {
+      a[i]=(int)encryptedMsg[i];
+      i++;
+    }
+
+    int e, phi, count;
+    encryptedMsg[i] =modulusPower(a[i],publicKey,n);
+    while(e<phi){
+    if(count==1)
+        break;
+    else
+        e++;
+    }
     /*
     Assume n =3233, p =17 & msg = Hello
     convert the msg to ascii: Hello => 72,101,108,108,111
@@ -250,7 +287,7 @@ char *encrypt(char msg[],int n, int publicKey){
     concatenate all the padded numbers into a string and return
 
     */
-    return encryptedMsg;
+return encryptedMsg;
 }
 
 /*
@@ -260,7 +297,41 @@ char *encrypt(char msg[],int n, int publicKey){
 */
 char *decrypt(char encryptedMsg[],int n, int privateKey){
     //dhanush
-    char *msg = (char *)malloc(sizeof(encryptedMsg)/sizeof(char));
-
+    char *msg = malloc((3*strlen(encryptedMsg))*sizeof(char));
+    msg = char2intstr(encryptedMsg);
     return msg;
 }
+
+char *char2intstr(char* msg){
+    int ascii,i,j=0,len = strlen(msg);
+    char *asciiInt = malloc(3*len*sizeof(char));
+    //asciiInt = "";
+    char* temp = malloc(3*sizeof(char));
+    for(i=0;i<len;i++){
+        ascii = (int)msg[i];
+        sprintf(temp, "%d", ascii);
+        int m = strlen(temp);
+        if(m==2){
+            temp = strconcat("0",temp);
+        }else if(m==1){
+            temp = strconcat("00",temp);
+        }
+        if(i==0){
+            strcpy(asciiInt,temp);
+        }else{
+            strcat(asciiInt,temp);
+        }
+        //if(i<len-1){
+        //    realloc(asciiInt,3*sizeof(char));
+        //}
+    }
+    return asciiInt;
+}
+
+char *strconcat(char *a, char *b){
+    char *res = malloc((strlen(a)+strlen(b))*sizeof(char));
+    strcpy(res,a);
+    strcat(res,b);
+    return res;
+}
+
