@@ -59,9 +59,9 @@ int main()
     test_encrypt("Hello",25,5,"Error - n > 255");
     test_encrypt("Hello",300,1000,"Error - n > publicKey");
     test_encrypt("Hello",300,0,"Error - publicKey != 0");
-    test_encrypt("Hello",3233,17,"30000016074507452185");
+    test_encrypt("Hello",3233,17,"30001313074507452185");
     printf("----------------------------------------------\n");
-    char *msg = decrypt("Hello",0,0);
+    char *msg = decrypt("30001313074507452185",3233,413);
     printf("%s",msg);
     /*
     char *msg = "Hello World";
@@ -259,25 +259,32 @@ char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateK
 */
 char *encrypt(char msg[],int n, int publicKey){
     //namratha
-    char *encryptedMsg =(char*) malloc(sizeof(msg)/sizeof(char));
-    encryptedMsg = msg;
-
-    int*a = malloc(strlen(msg)*sizeof(int));
-
-    int i = 0;
-    while(encryptedMsg[i]!='\0')
-    {
-      a[i]=(int)encryptedMsg[i];
-      i++;
+    if(n==0 || publicKey==0){
+        return "Error n -> 0 or p -> 0";
+    }else if(n < publicKey){
+        return "Error n < publickey";
+    }else if(n <= 255){
+        return "Error n <= 255";
     }
 
-    int e, phi, count;
-    encryptedMsg[i] =modulusPower(a[i],publicKey,n);
-    while(e<phi){
-    if(count==1)
-        break;
-    else
-        e++;
+    int number_of_digits = floor(log10(abs (n))) + 1;
+    int len = strlen(msg);
+    char *encryptedMsg = malloc(len*number_of_digits*sizeof(char));
+    encryptedMsg[0] = '\0';
+    int i,j,temp;
+    char *tmpStr = malloc(number_of_digits*sizeof(char));
+    char *ascii = malloc(number_of_digits*sizeof(char));
+    for(i=0;i<len;i++){
+        ascii[0] = '\0';
+        tmpStr[0] = '\0';
+        temp = (int)msg[i];
+        int encrypted_char = modulusPower(temp,publicKey,n);
+        sprintf(ascii, "%d", encrypted_char);
+        strcpy(tmpStr,ascii);
+        for(j=strlen(ascii);j<number_of_digits;j++){
+            tmpStr = strconcat("0",tmpStr);
+        }
+        encryptedMsg = strconcat(encryptedMsg,tmpStr);
     }
     /*
     Assume n =3233, p =17 & msg = Hello
@@ -297,9 +304,33 @@ return encryptedMsg;
 */
 char *decrypt(char encryptedMsg[],int n, int privateKey){
     //dhanush
+    if(n==0 || privateKey==0){
+        return "Error n -> 0 or privateKey -> 0";
+    }else if(n < privateKey){
+        return "Error n < privateKey";
+    }else if(n <= 255){
+        return "Error n <= 255";
+    }
     char *msg = malloc((3*strlen(encryptedMsg))*sizeof(char));
+    int i,j;
     msg = char2intstr(encryptedMsg);
-    return msg;
+    //msg = encryptedMsg;
+    int number_of_digits = floor(log10(abs (n))) + 1;
+    char *decryptedMsg = malloc((strlen(encryptedMsg)/number_of_digits)*sizeof(char));
+    char *temp = (char *)malloc(number_of_digits*sizeof(char));
+    for(i=0;i<strlen(encryptedMsg)/number_of_digits;i++){
+        for(j=0;j<number_of_digits;j++){
+            temp[j] = encryptedMsg[(i*number_of_digits)+j];
+        }
+        temp[j]='\0';
+        //printf("%s\n",temp);
+        int m = atoi(temp);
+        //printf("%i\n",m);
+        int c = modulusPower(m, privateKey, n);
+        decryptedMsg[i]=(char)(c);
+    }
+    decryptedMsg[i]='\0';
+    return decryptedMsg;
 }
 
 char *char2intstr(char* msg){
