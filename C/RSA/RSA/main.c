@@ -23,6 +23,8 @@ char *strconcat(char a[], char b[]);
 
 int main()
 {
+    /*
+
     printf("----------------------------------------------\n");
     printf("----------Testing function isPrime------------\n");
     printf("----------------------------------------------\n");
@@ -63,33 +65,39 @@ int main()
     printf("----------------------------------------------\n");
     char *msg = decrypt("30001313074507452185",3233,413);
     printf("%s",msg);
-    /*
-    char *msg = "Hello World";
+    */
+
+    //test_encrypt("Hello",2773,179,"30001313074507452185");
+
     int min,max,p,q,n,totient,e,d,k=0;
     double m;
-    p = 61;   //later replace p with p = primeNumber(min,max);
-    q = 53;   //later replace q with q = primeNumber(min,max);
-    if(!isPrime(p) || p==0){
-        printf("Error: Sorry p is not a prime number\n");
-        exit(0);
-    }else{
-        printf("p is a prime number\n");
+    srand ( time(NULL) );
+    p = rand()%10;
+    q = 50+rand()%50;
+    while(n <= 255){
+        while(!isPrime(p) || p > 100 || p<10)
+            p = primeNumber(floor(rand()%100),floor(rand()%100));
+        while(!isPrime(q) || q > 100 || q<10)
+            q = primeNumber(floor(rand()%100),floor(rand()%100));
+        if(!isPrime(p) || p==0){
+            printf("Error: Sorry p is not a prime number\n");
+            exit(0);
+        }
+        if(!isPrime(q) || q==0){
+            printf("Error: Sorry q is not a prime number\n");
+            exit(0);
+        }
+        n = p*q;
     }
-    if(!isPrime(q) || q==0){
-        printf("Error: Sorry q is not a prime number\n");
-        exit(0);
-    }else{
-        printf("q is a prime number\n");
-    }
-    n = p*q;
+
     totient = lcm((p-1),(q-1));
-    printf("Totient should be 780 your answer is %i\n",totient);
     e = coPrime(totient);
-    printf("Error: Public key is %i\n",e);
+    printf("Public key pair is (n,e)=(%i,%i)\n",n,e);
     if(e==0){
         printf("Public key cannot be 0\n");
         exit(0);
     }
+    k = ((e*e)-1)/totient;
     while(true){
         k = k+1;
         m = (double)(1+(k*totient))/e;
@@ -99,7 +107,29 @@ int main()
     }
     d = floor(m);
     printf("Private key is %i\n",d);
-    */
+    int sharedN,sharedE;
+    printf("Enter the n value of the shared public key\n");
+    scanf("%i",&sharedN);
+    printf("Enter the e value of the shared public key\n");
+    scanf("%i",&sharedE);
+    int cmd = 0;
+    while(cmd == 0){
+        printf("Enter 1 to Encrypt or 2 to Decrypt\n");
+        scanf("%i",&cmd);
+        if(cmd == 1){
+            char msg[255];
+            printf("Please enter the message to encrypt:\n");
+            scanf("%s",&msg);
+            printf("The encrypted message is: %s\n",encrypt(msg,sharedN, sharedE));
+            cmd =0;
+        }else if(cmd == 2){
+            char msg[255];
+            printf("Please enter the message to decrypt:\n");
+            scanf("%s",&msg);
+            printf("The decrypted message is: %s\n",decrypt(msg,n, d));
+            cmd =0;
+        }
+    }
 
     return 0;
 }
@@ -131,13 +161,16 @@ bool isPrime(int num){
 */
 int primeNumber(int min,int max){
     //namratha
+    if(min>max || max==0 || max ==1){
+        return 0;
+    }
 
  while(min <= max)
     {
         // Printing if current number is prime
         if(isPrime(min))
         {
-            printf("%d ", min);
+            break;
         }
 
         min++;
@@ -162,11 +195,8 @@ int modulusPower(int base, int exp, int mod){
 
     int result = 1;
     while (exp > 0) {
-       if ((exp % 2) == 1) {
-           result = (result * base) % mod;
-       }
-       base = (base * base) % mod;
-       exp = floor(exp / 2);
+        result = (result * base) % mod;
+       exp--;
     }
     return result;
 
@@ -207,15 +237,15 @@ int coPrime(int a){
     //dhanush
     int k = 1,i,j=0;
     bool flag;
-    int* primeNumbers = (int*)malloc(sizeof(int));
+    int primeNumbers[10000];
     int numberOfPrimes = 0;
     int numberOfCoprimes = 0;
-    int* coprimes = (int*)malloc(sizeof(int));
+    int coprimes[100];
     for(i=2;i<sqrt(a);i++){
         if(isPrime(i) && a%i==0){
             primeNumbers[numberOfPrimes] = i;
             numberOfPrimes++;
-            realloc(primeNumbers, (sizeof(int)));
+            //realloc(primeNumbers, (sizeof(int)));
         }
     }
     for(i=2;i<a;i++){
@@ -229,7 +259,10 @@ int coPrime(int a){
         if(flag){
             coprimes[numberOfCoprimes] = i;
             numberOfCoprimes++;
-            realloc(coprimes, (sizeof(int)));
+            if(numberOfCoprimes > 100){
+                break;
+            }
+            //realloc(coprimes, (sizeof(int)));
         }
     }
 
@@ -284,7 +317,7 @@ char *encrypt(char msg[],int n, int publicKey){
         for(j=strlen(ascii);j<number_of_digits;j++){
             tmpStr = strconcat("0",tmpStr);
         }
-        encryptedMsg = strconcat(encryptedMsg,tmpStr);
+        strcat(encryptedMsg,tmpStr);
     }
     /*
     Assume n =3233, p =17 & msg = Hello
@@ -334,7 +367,7 @@ char *decrypt(char encryptedMsg[],int n, int privateKey){
 }
 
 char *char2intstr(char* msg){
-    int ascii,i,j=0,len = strlen(msg);
+    int ascii,i,len = strlen(msg);
     char *asciiInt = malloc(3*len*sizeof(char));
     //asciiInt = "";
     char* temp = malloc(3*sizeof(char));
@@ -360,6 +393,7 @@ char *char2intstr(char* msg){
 }
 
 char *strconcat(char *a, char *b){
+
     char *res = malloc((strlen(a)+strlen(b))*sizeof(char));
     strcpy(res,a);
     strcat(res,b);
