@@ -1,3 +1,4 @@
+import java.util.Arrays;
 class Test{
 	static RSA rsaObject;
 	public static void main(String[] args){
@@ -23,6 +24,11 @@ class Test{
 		testLcm(23002,1000,"11501000");
 		testLcm(0,5,"0");
 		testLcm(5,1,"5");
+		System.out.println("\n************************************************************************\n*****************************Testing CoPrime*********************************\n************************************************************************");
+		testCoPrime(25,new int[]{1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 16, 17, 18, 19, 21, 22, 23, 24});
+		testCoPrime(0,new int[]{0});
+		testCoPrime(1,new int[]{0});
+		testCoPrime(10,new int[]{1, 3, 7, 9});
 	}
 	
 	public static void testIsPrime(int num,String result){
@@ -47,6 +53,25 @@ class Test{
 		int lcm = rsaObject.lcm(a, b);
 		System.out.println("Parameters Passed: a="+a+", b="+b);
 		testPrint(Integer.toString(lcm), result);
+	}
+	
+	public static void testCoPrime(int a, int ans[])
+	{
+		int coprime = rsaObject.coprime(a);
+		boolean found = false;
+		int i;
+		System.out.println("Parameters Passed: a="+a+");
+		for(i=0;i<ans.length;i++){
+			if(ans[i] == coprime){
+				found = true;
+				break;
+			}
+		}
+		if(found){
+			testPrint(Integer.toString(coprime),Integer.toString(ans[i]));
+		}else{
+			testPrint(Integer.toString(coprime),"The returned value should be one among: "+Arrays.toString(ans));
+		}
 	}
 	
 	public static void testPrint(String returned,String actual){
