@@ -1,4 +1,5 @@
 import java.math.*;
+import java.lang.Math;
 public class RSA{
 
 	public boolean isPrime(int num){
@@ -43,7 +44,19 @@ public class RSA{
 
 	public int lcm(int a, int b){
 
-		return 0;
+		double val;
+		int k = 1;
+		if(a==0 || b==0) {return 0;}
+		if(a==1)return b;
+		if(b==1)return a;
+		
+		while(1) {
+			val = (double)(a*k)/b ;
+			if val == Math.floor(val){
+				return a*k;
+		    }else {
+			 k=k+1;}
+	    }
 	}
 
 	public int coprime(int a){
