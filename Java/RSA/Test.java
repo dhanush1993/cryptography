@@ -60,7 +60,7 @@ class Test{
 		int coprime = rsaObject.coprime(a);
 		boolean found = false;
 		int i;
-		System.out.println("Parameters Passed: a="+a+");
+		System.out.println("Parameters Passed: a="+a);
 		for(i=0;i<ans.length;i++){
 			if(ans[i] == coprime){
 				found = true;
