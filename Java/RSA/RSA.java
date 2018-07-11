@@ -50,9 +50,9 @@ public class RSA{
 		if(a==1)return b;
 		if(b==1)return a;
 
-		while(1) {
+		while(true) {
 			val = (double)(a*k)/b ;
-			if val == Math.floor(val){
+			if (val == Math.floor(val)){
 				return a*k;
 		    }else {
 			 k=k+1;}
