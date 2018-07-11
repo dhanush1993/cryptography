@@ -1,5 +1,6 @@
-import java.math.*;
+import java.util.*;
 import java.lang.Math;
+import java.util.Random;
 public class RSA{
 
 	public boolean isPrime(int num){
@@ -61,7 +62,42 @@ public class RSA{
 
 	public int coprime(int a){
 
-		return 0;
+		int k = 1,i,j=0;
+        boolean flag;
+        int primeNumbers[];
+        primeNumbers = new int[10000];
+        int numberOfPrimes = 0;
+        int numberOfCoprimes = 0;
+        int coprimes[];
+        coprimes= new int[100];
+
+        for(i=2;i<Math.sqrt(a);i++){
+            if(isPrime(i) && a%i==0){
+            primeNumbers[numberOfPrimes] = i;
+            numberOfPrimes++;
+        }
+        }
+
+        for(i=2;i<a;i++){
+        flag = true;
+        for(j=0;j<numberOfPrimes;j++){
+            if(i>=primeNumbers[j] && i%primeNumbers[j]==0){
+                flag = false;
+                break;
+            }
+        }
+        if(flag){
+            coprimes[numberOfCoprimes] = i;
+            numberOfCoprimes++;
+            if(numberOfCoprimes > 100){
+                break;
+            }
+            
+        }
+    }
+
+    int result = coprimes[(int)Math.random() % numberOfCoprimes];
+    return result;
 	}
 
 	public String encrypt(String msg,int n, int publicKey){
