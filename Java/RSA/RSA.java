@@ -49,7 +49,7 @@ public class RSA{
 		if(a==0 || b==0) {return 0;}
 		if(a==1)return b;
 		if(b==1)return a;
-		
+
 		while(1) {
 			val = (double)(a*k)/b ;
 			if val == Math.floor(val){
@@ -65,11 +65,34 @@ public class RSA{
 	}
 
 	public String encrypt(String msg,int n, int publicKey){
-		String encryptedMsg = "";
 
-		return encryptedMsg;
-	}
+    //namratha
+    if(n==0 || publicKey==0){
+        return "Error n -> 0 or p -> 0";
+    }else if(n < publicKey){
+        return "Error n < publickey";
+    }else if(n <= 255){
+        return "Error n <= 255";
+    }
 
+    int number_of_digits = (int)(Math.floor(Math.log10(Math.abs (n))) + 1);
+    int len = msg.length();
+    String encryptedMsg = new string(len*number_of_digits);
+    int temp;
+    String tmpStr = new String(number_of_digits);
+    String ascii = new String(number_of_digits);
+    for(i=0;i<len;i++){
+        ascii[0] = '\0';
+        tmpStr[0] = '\0';
+        temp = (int)msg[i];
+        int encrypted_char = modulusPower(temp,publicKey,n);
+        sprintf(ascii, "%d", encrypted_char);
+        strcpy(tmpStr,ascii);
+        for(j=ascii.length();j<number_of_digits;j++){
+            tmpStr = strconcat("0",tmpStr);
+        }
+        strcat(encryptedMsg,tmpStr);
+    }
 	public String decrypt(String encryptedMsg,int n, int privateKey){
 		String decryptedMsg = "";
 
