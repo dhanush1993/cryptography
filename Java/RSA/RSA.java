@@ -92,7 +92,7 @@ public class RSA{
             if(numberOfCoprimes > 100){
                 break;
             }
-            
+
         }
     }
 
@@ -112,22 +112,22 @@ public class RSA{
     }
 
     int number_of_digits = (int)(Math.floor(Math.log10(Math.abs (n))) + 1);
-    int len = msg.length();
-    String encryptedMsg = new string(len*number_of_digits);
+
+    String encryptedMsg = " ";
     int temp;
-    String tmpStr = new String(number_of_digits);
-    String ascii = new String(number_of_digits);
-    for(i=0;i<len;i++){
-        ascii[0] = '\0';
-        tmpStr[0] = '\0';
-        temp = (int)msg[i];
+
+
+    for(i=0;i<msg.length();i++){
+        String ascii = " ";
+
+        temp = (int)msg.charAt(i);
         int encrypted_char = modulusPower(temp,publicKey,n);
-        sprintf(ascii, "%d", encrypted_char);
-        strcpy(tmpStr,ascii);
+        ascii = Integer.toString(encrypted_char);
+
         for(j=ascii.length();j<number_of_digits;j++){
-            tmpStr = strconcat("0",tmpStr);
+            ascii = "0" + ascii;
         }
-        strcat(encryptedMsg,tmpStr);
+        encryptedMsg = encryptedMsg + ascii;
     }
 	public String decrypt(String encryptedMsg,int n, int privateKey){
 		String decryptedMsg = "";
