@@ -1,16 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-int primeNumber(int min,int max);
-bool isPrime(int num);
-int modulusPower(int base, int exp, int mod);
-int lcm(int a, int b);
-int coPrime(int a);
-char *chineseRemainderAlgorithm(char encryptedMsg[], int p, int q,  int privateKey);
-char *encrypt(char msg[],int n, int publicKey);
-char *decrypt(char encryptedMsg[],int n, int privateKey);
-
+#include "rsa.h"
 
 void test_isPrime(int num,char* result);
 void test_print(char *actual_value, char *returned_value);
@@ -62,7 +53,7 @@ void test_lcm(int a,int b,char* result){
 void test_encrypt(char* msg,int n, int publicKey, char* result){
     printf("Testing for encryption (%s,%i,%i)\n",msg,n,publicKey);
     char *encryptMsg=(char*) malloc((sizeof(msg)/sizeof(char))*digits_in_num(n));
-    encryptMsg = encrypt(msg,n, publicKey);
+    encryptMsg = encrypted(msg,n, publicKey);
     test_print(result,encryptMsg);
 }
 
