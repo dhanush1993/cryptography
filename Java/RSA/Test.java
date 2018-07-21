@@ -1,3 +1,4 @@
+//package com.rsa.main;
 import java.util.Arrays;
 class Test{
 	static RSA rsaObject;
@@ -29,48 +30,123 @@ class Test{
 		testCoPrime(0,new int[]{0});
 		testCoPrime(1,new int[]{0});
 		testCoPrime(10,new int[]{1, 3, 7, 9});
+		System.out.println("\n************************************************************************\n*****************************Testing Encrypt*********************************\n************************************************************************");
+		testEncrypt("Hello",25,5,"Error n <= 255");
+	    testEncrypt("Hello",300,1000,"Error n < publickey");
+	    testEncrypt("Hello",300,0,"Error n -> 0 or p -> 0");
+	    testEncrypt("Hello",3233,17,"30001313074507452185");
+	    System.out.println("\n************************************************************************\n*****************************Testing Decrypt*********************************\n************************************************************************");
+		testDecrypt("30001313074507452185",25,5,"Error n <= 255");
+	    testDecrypt("30001313074507452185",300,1000,"Error n < private");
+	    testDecrypt("30001313074507452185",300,0,"Error n -> 0 or p -> 0");
+	    testDecrypt("30001313074507452185",3233,413,"Hello");
 	}
 	
 	public static void testIsPrime(int num,String result){
-		boolean isPrime = rsaObject.isPrime(num);
+		boolean isPrime = false;
+		try {
+			isPrime = rsaObject.isPrime(num);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}finally {
 		System.out.println("Parameters Passed: num="+num);
 		testPrint(Boolean.toString(isPrime), result);
+		}
 	}
 	
 	public static void testPrimeNumber(int min,int max,String result){
-		int primeNumber = rsaObject.primeNumber(min, max);
-		System.out.println("Parameters Passed: min="+min+", max="+max);
-		testPrint(Integer.toString(primeNumber), result);
+		int primeNumber = 0;
+		try {
+			primeNumber = rsaObject.primeNumber(min, max);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());;
+		}finally {
+			System.out.println("Parameters Passed: min="+min+", max="+max);
+			testPrint(Integer.toString(primeNumber), result);
+		}
 	}
 	
 	public static void testModulusPower(int base,int exp, int mod, String result){
-		double modulusPower = rsaObject.modulusPower(base, exp, mod);
-		System.out.println("Parameters Passed: base="+base+", exp="+exp+", mod="+mod);
-		testPrint(Double.toString(modulusPower), result);
+		double modulusPower = 0.0;
+		try {
+			modulusPower = rsaObject.modulusPower(base, exp, mod);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			
+		}finally {
+			System.out.println("Parameters Passed: base="+base+", exp="+exp+", mod="+mod);
+			testPrint(Double.toString(modulusPower), result);
+		}
 	}
 	
 	public static void testLcm(int a, int b, String result){
-		int lcm = rsaObject.lcm(a, b);
-		System.out.println("Parameters Passed: a="+a+", b="+b);
-		testPrint(Integer.toString(lcm), result);
+		int lcm = 0;
+		try {
+			lcm = rsaObject.lcm(a, b);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}finally {
+			System.out.println("Parameters Passed: a="+a+", b="+b);
+			testPrint(Integer.toString(lcm), result);
+		}
 	}
 	
 	public static void testCoPrime(int a, int ans[])
 	{
-		int coprime = rsaObject.coprime(a);
-		boolean found = false;
-		int i;
-		System.out.println("Parameters Passed: a="+a);
-		for(i=0;i<ans.length;i++){
-			if(ans[i] == coprime){
-				found = true;
-				break;
+		int coprime = 0;
+		try {
+			coprime = rsaObject.coprime(a);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+		finally {
+			boolean found = false;
+			int i;
+			System.out.println("Parameters Passed: a="+a);
+			for(i=0;i<ans.length;i++){
+				if(ans[i] == coprime){
+					found = true;
+					break;
+				}
+			}
+			if(found){
+				testPrint(Integer.toString(coprime),Integer.toString(ans[i]));
+			}else{
+				testPrint(Integer.toString(coprime),"The returned value should be one among: "+Arrays.toString(ans));
 			}
 		}
-		if(found){
-			testPrint(Integer.toString(coprime),Integer.toString(ans[i]));
-		}else{
-			testPrint(Integer.toString(coprime),"The returned value should be one among: "+Arrays.toString(ans));
+	}
+	
+	public static void testEncrypt(String msg,int n, int publicKey, String ans)
+	{
+		String encMsg = "";
+		try {
+			encMsg = rsaObject.encrypt(msg, n, publicKey);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			encMsg = e.getMessage();
+		}finally {
+			System.out.println("Parameters Passed: msg="+msg+" ,n="+n+" ,publicKey="+publicKey);
+			testPrint(encMsg, ans);
+		}
+	}
+	
+	public static void testDecrypt(String encMsg,int n, int privateKey, String ans)
+	{
+		String decMsg = "";
+		try {
+			decMsg = rsaObject.decrypt(encMsg, n, privateKey);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			decMsg = e.getMessage();
+		}finally {
+		System.out.println("Parameters Passed: msg="+encMsg+" ,n="+n+" ,publicKey="+privateKey);
+		testPrint(decMsg, ans);
 		}
 	}
 	
